@@ -10,7 +10,7 @@ public interface EmployeeService {
 	public List<Employee> getAllEmployees();
 	public List<Employee> findByFirstName(String firstName);
 	public void saveEmployee(EmployeeDto employeeDto);
-	public void updateEmployee(Employee employee);
+	public void updateEmployee(EmployeeDto employeeDto);
 	public Employee getEmployeeById(long id);
 	public void deleteEmployeeById(long id);
 	Page<Employee> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);

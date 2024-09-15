@@ -1,11 +1,14 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.UserRegistrationDto;
+import com.example.demo.dto.UserUpdateDto;
+import com.example.demo.model.CustomUserDetails;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -51,6 +54,23 @@ public class UserServiceImpl implements UserService{
 		} else {
 			return users.get(0); // Trả về người dùng đầu tiên (nếu email là duy nhất)
 		}
+	}
+	
+	@Override
+	public User findById(long id) {
+		return userRepository.getReferenceById(id);
+	}
+	
+	@Override
+	@Transactional
+	public void update(UserUpdateDto userUpdateDto) {
+		Role role = new Role("ROLE_USER");
+		userRepository.save(new User(userUpdateDto.getId(),
+				userUpdateDto.getFirstName(),
+				userUpdateDto.getLastName(),
+				userUpdateDto.getEmail(),
+				userUpdateDto.getPassword(),
+				Arrays.asList(role)));
 	}
 	
 	@Override

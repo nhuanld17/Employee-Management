@@ -56,8 +56,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 	
 	@Override
 	@Transactional
-	public void updateEmployee(Employee employee) {
-		employeeRepository.saveAndFlush(employee);
+	public void updateEmployee(EmployeeDto employeeDto) {
+		employeeRepository.saveAndFlush(employeeDto.toEmployee());
 	}
 	
 	@Override

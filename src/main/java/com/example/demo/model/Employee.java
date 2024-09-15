@@ -68,7 +68,7 @@ public class Employee {
 		this.lastName = lastName;
 	}
 	
-	public EmployeeDto employeeDto(){
+	public EmployeeDto toEmployeeDto(){
 		return new EmployeeDto(id, firstName, lastName, email);
 	}
 }

@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.demo.dto.UserRegistrationDto;
+import com.example.demo.dto.UserUpdateDto;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -23,7 +25,9 @@ public class User {
 	
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {
+			CascadeType.ALL
+	})
 	@JoinTable(
 			name ="users_roles",
 			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -50,6 +54,14 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
+	}
+	
+	public User(long id, String firstName, String lastName, String email, String password) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
 	}
 	
 	public String getEmail() {
@@ -98,5 +110,25 @@ public class User {
 	
 	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
+	}
+	
+	public UserRegistrationDto toUserRegistrationDto() {
+		UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+		userRegistrationDto.setId(id);
+		userRegistrationDto.setFirstName(firstName);
+		userRegistrationDto.setLastName(lastName);
+		userRegistrationDto.setEmail(email);
+		userRegistrationDto.setPassword(password);
+		return userRegistrationDto;
+	}
+	
+	public UserUpdateDto toUserUpdateDto(){
+		UserUpdateDto userUpdateDto = new UserUpdateDto();
+		userUpdateDto.setId(id);
+		userUpdateDto.setFirstName(firstName);
+		userUpdateDto.setLastName(lastName);
+		userUpdateDto.setEmail(email);
+		userUpdateDto.setPassword(password);
+		return userUpdateDto;
 	}
 }

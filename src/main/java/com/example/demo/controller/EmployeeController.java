@@ -1,12 +1,19 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeDto;
+import com.example.demo.dto.UserRegistrationDto;
+import com.example.demo.dto.UserUpdateDto;
+import com.example.demo.model.CustomUserDetails;
 import com.example.demo.model.Employee;
+import com.example.demo.model.User;
 import com.example.demo.service.EmployeeService;
+import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,10 +25,13 @@ import java.util.List;
 @Controller
 public class EmployeeController {
 	private EmployeeService employeeService;
+	private UserService userService;
 	
 	@Autowired
-	public EmployeeController(EmployeeService employeeService) {
+	public EmployeeController(EmployeeService employeeService, UserService userService) {
 		this.employeeService = employeeService;
+		this.userService = userService;
+		
 	}
 	
 	// Display list of employee
@@ -54,7 +64,11 @@ public class EmployeeController {
 	}
 	
 	@PostMapping("/updateEmployee")
-	public String updateEmployeeForm(@ModelAttribute(name = "employee") Employee employee){
+	public String updateEmployeeForm(@Valid @ModelAttribute(name = "employee") EmployeeDto employee,
+	                                 BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			return "update-employee-form";
+		}
 		employeeService.updateEmployee(employee);
 		return "redirect:/";
 	}
@@ -62,7 +76,8 @@ public class EmployeeController {
 	@GetMapping("/showFormForUpdate/{id}")
 	public String showFormForUpdate(@PathVariable long id, Model model) {
 		Employee employee = employeeService.getEmployeeById(id);
-		model.addAttribute("employee", employee);
+		EmployeeDto employeeDto = employee.toEmployeeDto();
+		model.addAttribute("employee", employeeDto);
 		return "update-employee-form";
 	}
 	
@@ -77,6 +92,38 @@ public class EmployeeController {
 		Employee employee = employeeService.getEmployeeById(id);
 		model.addAttribute("employee", employee);
 		return "detail_employee";
+	}
+	
+	@GetMapping("/showProfile")
+	public String showProfile(Model model) {
+		// Lấy thông tin người dùng đã đăng nhập
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
+		
+		UserUpdateDto userUpdateDto = userService.findByEmail(userDetails.getEmail()).toUserUpdateDto();
+		System.out.println("Id: " + userUpdateDto.getId());
+		System.out.println("First name: " + userUpdateDto.getFirstName());
+		System.out.println("Last name: " + userUpdateDto.getLastName());
+		System.out.println("Email: " + userUpdateDto.getEmail());
+		System.out.println("==========================================");
+		// Thêm thông tin vào model để hiển thị trong view
+		model.addAttribute("user", userUpdateDto);
+		
+		return "profile";
+	}
+	
+	@PostMapping("/updateUser")
+	public String updateUser(@Valid @ModelAttribute("user") UserUpdateDto userUpdateDto,
+	                         BindingResult bindingResult){
+		if (bindingResult.hasErrors()) {
+			System.out.println("Error: " + bindingResult.getAllErrors());
+			return "profile";
+		}
+		
+		User user = userService.findById(userUpdateDto.getId());
+		userUpdateDto.setPassword(user.getPassword());
+		userService.update(userUpdateDto);
+		return "redirect:/showProfile";
 	}
 	
 	@GetMapping("/page/{pageNo}")

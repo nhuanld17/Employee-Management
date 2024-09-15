@@ -1,12 +1,11 @@
-package com.example.demo.service;
+package com.example.demo.model;
 
-import com.example.demo.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-
+// Lưu trữ thông tin của người đăng nhập
 public class CustomUserDetails implements UserDetails {
 	private User user;
 	
@@ -36,7 +35,7 @@ public class CustomUserDetails implements UserDetails {
 	
 	@Override
 	public String getUsername() {
-		return user.getEmail();
+		return user.getEmail(); // Sử dụng email làm tên đăng nhập
 	}
 	
 	@Override
@@ -67,5 +66,9 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return UserDetails.super.isEnabled();
+	}
+	
+	public User getUser(){
+		return user;
 	}
 }

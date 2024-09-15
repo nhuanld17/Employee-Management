@@ -52,13 +52,13 @@ public class UserRegistrationController {
 		User user = userService.findByEmail(register.getEmail());
 		if (user != null) {
 			model.addAttribute("user", new UserRegistrationDto());
-			model.addAttribute("user_error", "Tài khoản đã tồn tại");
+			model.addAttribute("user_error", "Email đã được sử dụng");
 			return "registration-form";
 		}
 		
 		// Nếu chưa tồn tại thì lưu vào csdl
 		user = userService.save(register);
-		session.setAttribute("user", user);
+//		session.setAttribute("user", user);
 		// Trả về trang đăng nhập với các trường input đã được điền sẵn nhờ vào session
 		return "login-form";
 	}

@@ -18,15 +18,30 @@
             <input type="hidden" th:field="*{id}">
             <div class="mb-3">
                 <label>First Name</label>
-                <input type="text" class="form-control" th:field="*{firstName}" placeholder="First Name" required autofocus>
+                <input type="text" class="form-control" th:field="*{firstName}" placeholder="First Name" autofocus>
+                <div th:if="${#fields.hasErrors('firstName')}">
+                    <ul>
+                        <li th:each="e:${#fields.errors('firstName')}" th:text="${e}"></li>
+                    </ul>
+                </div>
             </div>
             <div class="mb-3">
                 <label>Last Name</label>
-                <input type="text" class="form-control" th:field="*{lastName}" placeholder="Last Name" required>
+                <input type="text" class="form-control" th:field="*{lastName}" placeholder="Last Name" >
+                <div th:if="${#fields.hasErrors('lastName')}">
+                    <ul>
+                        <li th:each="e:${#fields.errors('lastName')}" th:text="${e}"></li>
+                    </ul>
+                </div>
             </div>
             <div class="mb-3">
                 <label>Email</label>
-                <input type="email" class="form-control" th:field="*{email}" placeholder="Email" required>
+                <input type="email" class="form-control" th:field="*{email}" placeholder="Email" >
+                <div th:if="${#fields.hasErrors('email')}">
+                    <ul>
+                        <li th:each="e:${#fields.errors('email')}" th:text="${e}"></li>
+                    </ul>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
             <a th:href="@{/}" class="btn btn-dark">BACK</a>
