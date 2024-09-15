@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+    <nav th:replace="index.html :: nav-bar"></nav>
+    <div class="container" style="padding-top: 60px">
+        <h2>Registration</h2>
+        <form th:action="@{/registration}" th:object="${user}" method="post">
+            <div th:if="${user_error}">
+                <div th:text="${user_error}" class="alert alert-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label>First Name</label>
+                <input type="text" class="form-control" th:field="*{firstName}" placeholder="First Name" autofocus>
+                <div th:if="${#fields.hasErrors('firstName')}">
+                    <ul>
+                        <li th:each="e:${#fields.errors('firstName')}" th:text="${e}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>Last Name</label>
+                <input type="text" class="form-control" th:field="*{lastName}" placeholder="Last Name">
+                <div th:if="${#fields.hasErrors('lastName')}">
+                    <ul>
+                        <li th:each="e:${#fields.errors('lastName')}" th:text="${e}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>Email</label>
+                <input type="email" class="form-control" th:field="*{email}" placeholder="Email">
+                <div th:if="${#fields.hasErrors('email')}">
+                    <ul>
+                        <li th:each="e:${#fields.errors('email')}" th:text="${e}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>Pass word</label>
+                <input type="password" class="form-control" th:field="*{password}" placeholder="Password">
+                <div th:if="${#fields.hasErrors('password')}">
+                    <ul>
+                        <li th:each="e:${#fields.errors('password')}" th:text="${e}"></li>
+                    </ul>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+            <a th:href="@{/}" class="btn btn-outline-primary">Login</a>
+        </form>
+    </div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
