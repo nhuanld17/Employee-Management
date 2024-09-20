@@ -126,6 +126,29 @@ public class EmployeeController {
 		return "redirect:/showProfile";
 	}
 	
+	@GetMapping("/search")
+	public String searchEmpByEmail(
+			@RequestParam("search-by-email") String email,
+			@RequestParam(value = "page", defaultValue = "1") int pageNo,
+			@RequestParam(value = "size", defaultValue = "5") int pageSize,
+			@RequestParam(value = "sortField", defaultValue = "id") String sortField,
+			@RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection,
+			Model model
+	){
+		// Gọi service để tìm kiếm, phân trang và sắp xếp
+		Page<Employee> employeePage = employeeService.searchEmployeeByEmailWithPaginationAndSort(email, pageNo, pageSize, sortField, sortDirection);
+		model.addAttribute("employees", employeePage.getContent());
+		model.addAttribute("currentPage", pageNo);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDirection", sortDirection);
+		model.addAttribute("reverseSortDirection", sortDirection.equals("asc") ? "desc" : "asc");
+		model.addAttribute("totalPages", employeePage.getTotalPages());
+		model.addAttribute("email", email);
+		
+		return "search-results-list";
+	}
+	
 	@GetMapping("/page/{pageNo}")
 	private String findPaginatedWithSort(@PathVariable(value = "pageNo") int pageNo,
 	                                     @RequestParam("sortField") String sortField,

@@ -10,7 +10,7 @@ public class UserRegistrationDto {
 	private long id;
 	
 	@NotBlank(message = "Thông tin bắt buộc")
-	@Size(min = 3, message = "Độ dài tối thiểu là 1")
+	@Size(min = 1, message = "Độ dài tối thiểu là 1")
 	private String firstName;
 	
 	@NotBlank(message = "Thông tin bắt buộc")

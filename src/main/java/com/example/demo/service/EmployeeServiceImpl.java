@@ -73,4 +73,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 		return employeeRepository.findAll(pageable);
 	}
+	
+	@Override
+	public Page<Employee> searchEmployeeByEmailWithPaginationAndSort(String email, int pageNo, int pageSize, String sortField, String sortDirection) {
+		// Xác định thứ tự sắp xếp tăng dần hoặc giảm dần
+		Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+				Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+		return employeeRepository.findByEmailContainingIgnoreCase(email, pageable);
+	}
 }

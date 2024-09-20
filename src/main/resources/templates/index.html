@@ -44,6 +44,17 @@
         <a th:href="@{/showEmployeeForm}" class="btn btn-primary btn-sm mb-3">
             Add Employee
         </a>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <form class="mb-5" method="GET" action="/search">
+                    <div class="input-group">
+                        <input type="text" name="search-by-email" id="search-by-email" class="form-control" placeholder="Search by email">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 
         <table class="table table-bordered table-striped table-responsive-md">
             <thead>
@@ -84,7 +95,7 @@
                     <a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-primary">
                         Update
                     </a>
-                    <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">
+                    <a sec:authorize="hasRole('ADMIN')" th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">
                         Delete
                     </a>
                     <a th:href="@{/detailEmployee/{id}(id=${employee.id})}" class="btn btn-info">

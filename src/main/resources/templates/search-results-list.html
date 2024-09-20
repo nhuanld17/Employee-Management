@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <nav th:replace="index.html::nav-bar"></nav>
+    <div class="container my-2" style="padding-top: 60px">
+        <h3>Kết quả tìm kiếm của <i th:text="${email}"></i></h3>
+
+        <table class="table table-bordered table-striped table-responsive-md">
+            <thead>
+                <tr>
+                    <th>
+                        <a th:href="@{/search(search-by-email=${email}, page=1, size=${pageSize}, sortField='id', sortDirection=${reverseSortDirection})}">
+                            ID
+                            <span th:text="${sortField == 'id' ? sortDirection == 'asc' ? '↑' : '↓' : ''}"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/search(search-by-email=${email}, page=1, size=${pageSize}, sortField='firstName', sortDirection=${reverseSortDirection})}">
+                            First Name
+                            <span th:text="${sortField == 'firstName' ? sortDirection == 'asc' ? '↑' : '↓' : ''}"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/search(search-by-email=${email}, page=1, size=${pageSize}, sortField='lastName', sortDirection=${reverseSortDirection})}">
+                            Last Name
+                            <span th:text="${sortField == 'lastName' ? sortDirection == 'asc' ? '↑' : '↓' : ''}"></span>
+                        </a>
+                    </th>
+                    <th>
+                        <a th:href="@{/search(search-by-email=${email}, page=1, size=${pageSize}, sortField='email', sortDirection=${reverseSortDirection})}">
+                            Email
+                            <span th:text="${sortField == 'email' ? sortDirection == 'asc' ? '↑' : '↓' : ''}"></span>
+                        </a>
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.id}"></td>
+                <td th:text="${employee.firstName}"></td>
+                <td th:text="${employee.lastName}"></td>
+                <td th:text="${employee.email}"></td>
+                <td>
+                    <!-- Các nút action -->
+                    <a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-primary">Update</a>
+                    <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">Delete</a>
+                    <a th:href="@{/detailEmployee/{id}(id=${employee.id})}" class="btn btn-info">Detail</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+<!--        <div th:if="${totalPages > 1}">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    &lt;!&ndash; First Page Button &ndash;&gt;
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=1, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                            <span class="sr-only">First</span>
+                        </a>
+                    </li>
+
+                    &lt;!&ndash; Previous Page Button &ndash;&gt;
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${currentPage - 1}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+
+                    &lt;!&ndash; Page Number Links &ndash;&gt;
+                    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${i}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}">
+                            [[${i}]]
+                        </a>
+                    </li>
+
+                    &lt;!&ndash; Next Page Button &ndash;&gt;
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${currentPage + 1}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+
+                    &lt;!&ndash; Last Page Button &ndash;&gt;
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${totalPages}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                            <span class="sr-only">Last</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>-->
+        <div th:if="${totalPages > 1}">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <!-- First Page Button -->
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=1, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                            <span class="sr-only">First</span>
+                        </a>
+                    </li>
+
+                    <!-- Previous Page Button -->
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${currentPage - 1}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+
+                    <!-- Page Number Links -->
+                    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${i}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}">
+                            [[${i}]]
+                        </a>
+                    </li>
+
+                    <!-- Next Page Button -->
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${currentPage + 1}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+
+                    <!-- Last Page Button -->
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/search(search-by-email=${email}, page=${totalPages}, size=${pageSize}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                            <span class="sr-only">Last</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
