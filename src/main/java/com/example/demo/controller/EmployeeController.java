@@ -96,11 +96,12 @@ public class EmployeeController {
 	
 	@GetMapping("/showProfile")
 	public String showProfile(Model model) {
+		
 		// Lấy thông tin người dùng đã đăng nhập
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		
-		UserUpdateDto userUpdateDto = userService.findByEmail(userDetails.getEmail()).toUserUpdateDto();
+		UserUpdateDto userUpdateDto = userService.findById(userDetails.getId()).toUserUpdateDto();
 		System.out.println("Id: " + userUpdateDto.getId());
 		System.out.println("First name: " + userUpdateDto.getFirstName());
 		System.out.println("Last name: " + userUpdateDto.getLastName());

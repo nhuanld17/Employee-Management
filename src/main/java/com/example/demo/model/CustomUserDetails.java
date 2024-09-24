@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-// Lưu trữ thông tin của người đăng nhập
+/* Lưu trữ thông tin của người dùng đã đăng nhập */
 public class CustomUserDetails implements UserDetails {
 	private User user;
 	
