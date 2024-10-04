@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeDto;
-import com.example.demo.dto.UserRegistrationDto;
 import com.example.demo.dto.UserUpdateDto;
 import com.example.demo.model.CustomUserDetails;
 import com.example.demo.model.Employee;
@@ -19,13 +18,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.tomcat.util.codec.binary.Base64;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
 public class EmployeeController {
-	private EmployeeService employeeService;
-	private UserService userService;
+	private final EmployeeService employeeService;
+	private final UserService userService;
 	
 	@Autowired
 	public EmployeeController(EmployeeService employeeService, UserService userService) {
@@ -95,7 +97,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("/showProfile")
-	public String showProfile(Model model) {
+	public String showProfile(Model model) throws IOException {
 		
 		// Lấy thông tin người dùng đã đăng nhập
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -106,7 +108,13 @@ public class EmployeeController {
 		System.out.println("First name: " + userUpdateDto.getFirstName());
 		System.out.println("Last name: " + userUpdateDto.getLastName());
 		System.out.println("Email: " + userUpdateDto.getEmail());
+		System.out.println("Image: " + userUpdateDto.getProfilePictureFile().getOriginalFilename());
 		System.out.println("==========================================");
+		
+		if (userUpdateDto.getProfilePictureFile() != null){
+			String base64Encoded = Base64.encodeBase64String(userUpdateDto.getProfilePictureFile().getBytes());
+			model.addAttribute("profilePicture", base64Encoded);
+		}
 		// Thêm thông tin vào model để hiển thị trong view
 		model.addAttribute("user", userUpdateDto);
 		
@@ -115,7 +123,7 @@ public class EmployeeController {
 	
 	@PostMapping("/updateUser")
 	public String updateUser(@Valid @ModelAttribute("user") UserUpdateDto userUpdateDto,
-	                         BindingResult bindingResult){
+	                         BindingResult bindingResult) throws IOException {
 		if (bindingResult.hasErrors()) {
 			System.out.println("Error: " + bindingResult.getAllErrors());
 			return "profile";
@@ -123,6 +131,17 @@ public class EmployeeController {
 		
 		User user = userService.findById(userUpdateDto.getId());
 		userUpdateDto.setPassword(user.getPassword());
+		
+		// Handling avatar files
+		MultipartFile profilePicture = userUpdateDto.getProfilePictureFile();
+		System.out.println(userUpdateDto.getProfilePictureFile().isEmpty());
+		if (profilePicture != null && !profilePicture.isEmpty()) {
+			try {
+				user.setProfilePicture(profilePicture.getBytes());
+			} catch (IOException e){
+				e.printStackTrace();
+			}
+		}
 		userService.update(userUpdateDto);
 		return "redirect:/showProfile";
 	}

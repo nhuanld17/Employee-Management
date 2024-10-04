@@ -9,16 +9,38 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .avatar{
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 1px solid #dddddd;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* hoặc 'contain', tùy thuộc vào cách bạn muốn hình ảnh hiển thị */
+        }
+    </style>
 </head>
 <body>
     <nav th:replace="index.html :: nav-bar"></nav>
     <div class="container my-2" style="padding-top: 70px">
         <h4>Information</h4>
-        <form action="#" th:action="@{/updateUser}" th:object="${user}" method="post">
+        <div class="avatar">
+            <img th:if="${profilePicture != null}"
+                 th:src="'data:image/jpg;base64,' + ${profilePicture}"
+                 alt="Profile Picture"/>
+            <img th:if="${profilePicture == null}" src="/images/default-profile.jpg" alt="Default Profile Picture"/>
+        </div>
+        <form action="#" th:action="@{/updateUser}" th:object="${user}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-<!--                <label for="id">ID</label>-->
+                <!--<label for="id">ID</label>-->
                 <input type="hidden" id="id" class="form-control" th:field="*{id}">
             </div>
+            <input type="file" th:field="*{profilePictureFile}" accept="image/*">
             <div class="mb-3">
                 <label for="first-name">First Name</label>
                 <input type="text" id="first-name" class="form-control" th:field="*{firstName}">

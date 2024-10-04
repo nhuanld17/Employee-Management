@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import com.example.demo.dto.UserRegistrationDto;
 import com.example.demo.dto.UserUpdateDto;
+import com.example.demo.util.MultipartFileUtil;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -35,6 +36,10 @@ public class User {
 	)
 	private Collection<Role> roles;
 	
+	@Lob
+	@Column(name = "profile_picture", columnDefinition = "MEDIUMBLOB")
+	private byte[] profilePicture;
+	
 	public User() {
 	
 	}
@@ -46,6 +51,16 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
+	}
+	
+	public User(long id, String firstName, String lastName, String email, String password, Collection<Role> roles, byte[] profilePicture) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+		this.profilePicture = profilePicture;
 	}
 	
 	public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
@@ -112,6 +127,14 @@ public class User {
 		this.roles = roles;
 	}
 	
+	public byte[] getProfilePicture() {
+		return profilePicture;
+	}
+	
+	public void setProfilePicture(byte[] profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+	
 	public UserRegistrationDto toUserRegistrationDto() {
 		UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
 		userRegistrationDto.setId(id);
@@ -129,6 +152,10 @@ public class User {
 		userUpdateDto.setLastName(lastName);
 		userUpdateDto.setEmail(email);
 		userUpdateDto.setPassword(password);
+		userUpdateDto.
+				setProfilePictureFile(
+						MultipartFileUtil.
+								convertBytesToMultipartFile(profilePicture, "name.jpg", "image/jpg"));
 		return userUpdateDto;
 	}
 }

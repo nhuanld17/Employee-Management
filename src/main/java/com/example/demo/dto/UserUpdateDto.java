@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public class UserUpdateDto {
 	private long id;
@@ -24,6 +25,8 @@ public class UserUpdateDto {
 	@Pattern(regexp = "^(?=.*\\d)(?=.*[\\W_]).{8,}$",
 			message = "Mật khẩu phải chứa ít nhất 1 chữ số và 1 kí tự đặc biệt")
 	private String password;
+	
+	private MultipartFile profilePictureFile;
 	
 	public UserUpdateDto() {
 	
@@ -82,5 +85,13 @@ public class UserUpdateDto {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public MultipartFile getProfilePictureFile() {
+		return profilePictureFile;
+	}
+	
+	public void setProfilePictureFile(MultipartFile profilePictureFile) {
+		this.profilePictureFile = profilePictureFile;
 	}
 }

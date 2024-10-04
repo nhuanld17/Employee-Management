@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,14 +64,15 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	@Transactional
-	public void update(UserUpdateDto userUpdateDto) {
+	public void update(UserUpdateDto userUpdateDto) throws IOException {
 		Role role = new Role("ROLE_USER");
 		userRepository.save(new User(userUpdateDto.getId(),
 				userUpdateDto.getFirstName(),
 				userUpdateDto.getLastName(),
 				userUpdateDto.getEmail(),
 				userUpdateDto.getPassword(),
-				Arrays.asList(role)));
+				Arrays.asList(role),
+				userUpdateDto.getProfilePictureFile().getBytes()));
 	}
 	
 	@Override

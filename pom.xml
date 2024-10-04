@@ -70,6 +70,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+		<!--
+			Thư viện spring-test chứa có class MockMultipartFile
+		    chuyển đổi mảng byte sang 1 MultipartFile
+		-->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
